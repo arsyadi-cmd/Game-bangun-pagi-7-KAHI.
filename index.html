@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>7 Kebiasaan Anak Hebat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            /* Cegah scroll horizontal/vertical berlebih di HP */
+            overscroll-behavior-y: none; 
+        }
+
+        /* --- Custom Animations --- */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(3deg); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+            80% { transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-pop-in {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.7); }
+            50% { box-shadow: 0 0 0 15px rgba(250, 204, 21, 0); }
+        }
+        .btn-start-pulse {
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes starSpin {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .star-anim {
+            animation: starSpin 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* --- Bubbly 3D Buttons --- */
+        .btn-3d {
+            transition: all 0.1s ease;
+            position: relative;
+            top: 0;
+        }
+        .btn-3d:active {
+            top: 4px;
+            border-bottom-width: 0px !important;
+            transform: translateY(4px);
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 1);
+        }
+
+        /* Utilities */
+        .hide { display: none !important; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-sky-300 via-blue-200 to-yellow-100 min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
+
+    <!-- Game Container (Mobile First) -->
+    <div class="relative w-full max-w-md h-[750px] max-h-[90vh] bg-sky-50 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border-[6px] border-white overflow-hidden flex flex-col">
+        
+        <!-- ================= 1. START SCREEN ================= -->
+        <div id="screen-start" class="absolute inset-0 z-10 flex flex-col items-center justify-center p-6 bg-gradient-to-b from-sky-400 to-sky-200 text-center transition-opacity duration-500">
+            <!-- Decorative Clouds -->
+            <div class="absolute top-10 left-4 text-5xl opacity-80 animate-float" style="animation-delay: 0s;">☁️</div>
+            <div class="absolute top-24 right-4 text-6xl opacity-80 animate-float" style="animation-delay: 1s;">☁️</div>
+            
+            <div class="text-8xl mb-4 animate-float" style="animation-delay: 0.5s;">🛌☀️</div>
+            
+            <h1 class="text-4xl font-black text-white mb-2 drop-shadow-md leading-tight">
+                Petualangan<br><span class="text-yellow-300">Pagi Budi</span>
+            </h1>
+            <p class="text-sky-50 font-bold mb-10 text-lg px-4 drop-shadow-sm">
+                Bantu Budi bangun pagi & jadi Anak Hebat Indonesia!
+            </p>
+            
+            <button onclick="startGame()" class="btn-3d btn-start-pulse w-full max-w-[250px] bg-yellow-400 text-yellow-900 border-b-[6px] border-yellow-600 rounded-3xl py-4 px-6 font-black text-2xl tracking-wide">
+                MULAI! 🚀
+            </button>
+        </div>
+
+        <!-- ================= 2. GAME SCREEN ================= -->
+        <div id="screen-game" class="hide absolute inset-0 z-0 flex flex-col h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMiIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjUpIi8+PC9zdmc+')] bg-sky-300">
+            
+            <!-- Progress Bar -->
+            <div class="px-6 pt-6 pb-2">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-bold text-white text-lg drop-shadow-sm" id="progress-text">Level 1 dari 7</span>
+                    <span class="font-bold text-yellow-300 text-xl" id="progress-emoji">🌅</span>
+                </div>
+                <div class="w-full bg-sky-700/30 rounded-full h-4 p-1">
+                    <div id="progress-fill" class="bg-gradient-to-r from-yellow-300 to-yellow-400 h-full rounded-full transition-all duration-500 ease-out" style="width: 14%;"></div>
+                </div>
+            </div>
+
+            <!-- Question Area -->
+            <div class="flex-grow flex flex-col justify-center px-5 pb-6">
+                <!-- Illustration -->
+                <div id="q-emoji" class="text-[100px] text-center mb-4 animate-float drop-shadow-xl z-10">
+                    🥱
+                </div>
+
+                <!-- Glass Card Question -->
+                <div class="glass-card rounded-[2rem] p-6 shadow-xl mb-6 relative">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white font-bold py-1 px-4 rounded-full text-sm shadow-md whitespace-nowrap">
+                        Kebiasaan Hebat
+                    </div>
+                    <p id="q-text" class="text-xl font-bold text-slate-700 text-center leading-relaxed mt-2">
+                        Budi baru bangun tidur. Apa yang harus Budi lakukan?
+                    </p>
+                </div>
+
+                <!-- Answer Buttons -->
+                <div id="options-container" class="space-y-4">
+                    <!-- Buttons injected via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 3. FEEDBACK MODAL ================= -->
+        <div id="modal-overlay" class="hide absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-5 opacity-0 transition-opacity duration-300">
+            <div id="modal-content" class="w-full max-w-sm bg-white rounded-[2rem] p-6 text-center transform scale-75 transition-transform duration-300 shadow-2xl border-4 border-white relative overflow-hidden">
+                <!-- Modal Decor -->
+                <div id="modal-bg-decor" class="absolute -top-20 -right-20 w-40 h-40 bg-green-200 rounded-full opacity-50"></div>
+                
+                <div id="modal-emoji" class="text-7xl mb-2 relative z-10">🎉</div>
+                <h2 id="modal-title" class="text-3xl font-black mb-3 relative z-10 text-green-500">Hebat!</h2>
+                <p id="modal-message" class="text-slate-600 font-bold mb-6 text-lg relative z-10 leading-snug">
+                    Memulai hari dengan senyuman bikin semangat!
+                </p>
+                
+                <button id="modal-btn" onclick="handleNext()" class="btn-3d w-full bg-green-500 text-green-900 border-b-[6px] border-green-700 rounded-2xl py-4 font-black text-xl text-white relative z-10">
+                    LANJUT
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= 4. END SCREEN ================= -->
+        <div id="screen-end" class="hide absolute inset-0 z-20 flex flex-col items-center justify-center p-6 bg-gradient-to-b from-yellow-200 to-green-200 text-center">
+            
+            <div class="flex space-x-2 mb-4">
+                <div class="text-6xl star-anim" style="animation-delay: 0s;">🌟</div>
+                <div class="text-7xl star-anim transform -translate-y-4" style="animation-delay: 0.2s;">🌟</div>
+                <div class="text-6xl star-anim" style="animation-delay: 0.4s;">🌟</div>
+            </div>
+
+            <h1 class="text-4xl font-black text-green-700 mb-2 drop-shadow-sm">Luar Biasa!</h1>
+            <p class="text-green-900 font-bold mb-6 text-lg px-2">
+                Kamu telah menyelesaikan 7 Kebiasaan Anak Hebat di pagi hari!
+            </p>
+            
+            <div class="glass-card rounded-3xl p-4 w-full text-left font-bold text-slate-700 text-sm space-y-2 mb-8 shadow-sm">
+                <div class="flex items-center"><span class="mr-2 text-green-500 text-lg">✅</span> Senyum & Bangun</div>
+                <div class="flex items-center"><span class="mr-2 text-green-500 text-lg">✅</span> Berdoa</div>
+                <div class="flex items-center"><span class="mr-2 text-green-500 text-lg">✅</span> Rapikan Kasur</div>
+                <div class="flex items-center"><span class="mr-2 text-green-500 text-lg">✅</span> Mandi Bersih</div>
+                <div class="flex items-center"><span class="mr-2 text-green-500 text-lg">✅</span> Sarapan Bergizi</div>
+                <div class="flex items-center"><span class="mr-2 text-green-500 text-lg">✅</span> Pamit Orang Tua</div>
+                <div class="flex items-center"><span class="mr-2 text-green-500 text-lg">✅</span> Semangat!</div>
+            </div>
+
+            <button onclick="resetGame()" class="btn-3d w-full bg-blue-500 text-white border-b-[6px] border-blue-700 rounded-3xl py-4 px-6 font-black text-2xl tracking-wide shadow-lg">
+                MAIN LAGI 🔄
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- QUIZ DATA ---
+        const quizData = [
+            {
+                q: "Budi baru bangun tidur. Apa yang harus Budi lakukan?",
+                emoji: "🥱",
+                progressEmoji: "🌅",
+                options: [
+                    { text: "Tersenyum & sambut pagi", correct: true, icon: "😃" },
+                    { text: "Tarik selimut & tidur lagi", correct: false, icon: "😴" }
+                ],
+                success: { title: "Pintar!", msg: "Memulai hari dengan senyuman bikin hari jadi lebih ceria dan penuh semangat!" },
+                fail: { title: "Oops!", msg: "Kalau tidur lagi, nanti Budi bisa terlambat. Yuk bangun dengan senyuman!" }
+            },
+            {
+                q: "Setelah membuka mata, Budi sebaiknya...",
+                emoji: "👀",
+                progressEmoji: "🤲",
+                options: [
+                    { text: "Langsung cari HP", correct: false, icon: "📱" },
+                    { text: "Berdoa & bersyukur", correct: true, icon: "🤲" }
+                ],
+                success: { title: "Alhamdulillah!", msg: "Berdoa adalah bentuk terima kasih kita atas hari yang baru." },
+                fail: { title: "Tunggu Dulu...", msg: "Main HP bisa nanti. Yang utama, kita bersyukur dulu sudah bangun sehat!" }
+            },
+            {
+                q: "Tempat tidur Budi berantakan nih. Budi harus...",
+                emoji: "🛏️",
+                progressEmoji: "✨",
+                options: [
+                    { text: "Biarkan saja, nanti dipakai lagi", correct: false, icon: "🤷‍♂️" },
+                    { text: "Merapikan selimut & bantal", correct: true, icon: "✨" }
+                ],
+                success: { title: "Anak Mandiri!", msg: "Anak hebat selalu merapikan tempat tidurnya sendiri setelah bangun." },
+                fail: { title: "Waduh...", msg: "Kamar yang rapi bikin hati senang lho. Anak hebat pasti bisa rapi-rapi sendiri!" }
+            },
+            {
+                q: "Waktunya membersihkan diri agar wangi!",
+                emoji: "🚿",
+                progressEmoji: "🧼",
+                options: [
+                    { text: "Mandi bersih & sikat gigi", correct: true, icon: "🛁" },
+                    { text: "Cuma cuci muka biar cepat", correct: false, icon: "💧" }
+                ],
+                success: { title: "Segar Sekali!", msg: "Mandi dan sikat gigi menjauhkan kita dari kuman penyakit." },
+                fail: { title: "Masih Bau Asam!", msg: "Kalau cuma cuci muka, kumannya masih nempel. Yuk mandi yang bersih!" }
+            },
+            {
+                q: "Kruyuk.. Perut Budi keroncongan sebelum ke sekolah.",
+                emoji: "🤤",
+                progressEmoji: "🍳",
+                options: [
+                    { text: "Sarapan bergizi buatan Ibu", correct: true, icon: "🥛" },
+                    { text: "Nggak usah, jajan saja nanti", correct: false, icon: "🍭" }
+                ],
+                success: { title: "Nyam Nyam!", msg: "Sarapan sehat memberi kita tenaga super untuk konsentrasi belajar." },
+                fail: { title: "Awas Sakit Perut!", msg: "Jajanan belum tentu sehat. Masakan Ibu adalah yang paling bergizi." }
+            },
+            {
+                q: "Sudah rapi pakai seragam! Kepada Ayah & Ibu, Budi harus...",
+                emoji: "🎒",
+                progressEmoji: "👨‍👩‍👦",
+                options: [
+                    { text: "Salim dan pamit", correct: true, icon: "🤝" },
+                    { text: "Langsung lari keluar rumah", correct: false, icon: "🏃‍♂️" }
+                ],
+                success: { title: "Anak Sopan!", msg: "Meminta doa orang tua membuat langkah kita ke sekolah jadi lebih berkah." },
+                fail: { title: "Jangan Buru-buru", msg: "Walau hampir telat, berpamitan pada orang tua itu wajib hukumnya ya." }
+            },
+            {
+                q: "Di perjalanan ke sekolah, Budi harusnya...",
+                emoji: "🏫",
+                progressEmoji: "🚀",
+                options: [
+                    { text: "Jalan sambil malas-malasan", correct: false, icon: "😒" },
+                    { text: "Berangkat riang gembira!", correct: true, icon: "🚀" }
+                ],
+                success: { title: "Yey Selesai!", msg: "Semangat ke sekolah adalah kunci untuk meraih cita-cita yang tinggi!" },
+                fail: { title: "Ayo Semangat!", msg: "Kalau malas, ilmu juga malas masuk ke otak kita. Senyum dong!" }
+            }
+        ];
+
+        // --- STATE & DOM ELEMENTS ---
+        let currentLevel = 0;
+        let isCorrectAnswered = false;
+
+        const screens = {
+            start: document.getElementById('screen-start'),
+            game: document.getElementById('screen-game'),
+            end: document.getElementById('screen-end')
+        };
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+
+        // --- FUNCTIONS ---
+        function startGame() {
+            screens.start.style.opacity = '0';
+            setTimeout(() => {
+                screens.start.classList.add('hide');
+                screens.game.classList.remove('hide');
+                currentLevel = 0;
+                renderLevel();
+            }, 300); // Wait for fade out
+        }
+
+        function renderLevel() {
+            const data = quizData[currentLevel];
+            
+            // Progress Bar
+            document.getElementById('progress-text').innerText = `Kebiasaan ${currentLevel + 1} dari 7`;
+            document.getElementById('progress-emoji').innerText = data.progressEmoji;
+            document.getElementById('progress-fill').style.width = `${((currentLevel + 1) / 7) * 100}%`;
+
+            // Question Content
+            const qContainer = document.getElementById('q-emoji');
+            qContainer.innerText = data.emoji;
+            // Restart animation
+            qContainer.classList.remove('animate-pop-in');
+            void qContainer.offsetWidth; // Trigger reflow
+            qContainer.classList.add('animate-pop-in');
+
+            document.getElementById('q-text').innerText = data.q;
+
+            // Buttons rendering
+            const optsContainer = document.getElementById('options-container');
+            optsContainer.innerHTML = '';
+            
+            data.options.forEach((opt, index) => {
+                // Button 1: Primary (Blue), Button 2: Secondary (Orange) to make it colorful
+                const colorClass = index === 0 
+                    ? 'bg-blue-500 border-blue-700 text-white hover:bg-blue-400' 
+                    : 'bg-orange-400 border-orange-600 text-white hover:bg-orange-300';
+
+                const btnHTML = `
+                    <button onclick="checkAnswer(${opt.correct})" class="btn-3d w-full ${colorClass} border-b-[6px] rounded-2xl p-4 flex items-center justify-between shadow-sm animate-pop-in" style="animation-delay: ${index * 0.1}s">
+                        <span class="font-bold text-lg text-left leading-tight pr-2">${opt.text}</span>
+                        <span class="bg-white/20 rounded-xl w-12 h-12 flex items-center justify-center text-2xl flex-shrink-0 backdrop-blur-sm shadow-inner">${opt.icon}</span>
+                    </button>
+                `;
+                optsContainer.insertAdjacentHTML('beforeend', btnHTML);
+            });
+        }
+
+        function checkAnswer(isCorrect) {
+            isCorrectAnswered = isCorrect;
+            const data = quizData[currentLevel];
+            
+            // Setup Modal Content
+            if(isCorrect) {
+                document.getElementById('modal-emoji').innerText = "🌟";
+                document.getElementById('modal-title').innerText = data.success.title;
+                document.getElementById('modal-title').className = "text-3xl font-black mb-3 relative z-10 text-green-500";
+                document.getElementById('modal-message').innerText = data.success.msg;
+                
+                const btn = document.getElementById('modal-btn');
+                btn.innerText = "LANJUT";
+                btn.className = "btn-3d w-full bg-green-500 border-b-[6px] border-green-700 rounded-2xl py-4 font-black text-xl text-white relative z-10";
+                
+                document.getElementById('modal-bg-decor').className = "absolute -top-20 -right-20 w-40 h-40 bg-green-200 rounded-full opacity-50";
+            } else {
+                document.getElementById('modal-emoji').innerText = "😅";
+                document.getElementById('modal-title').innerText = data.fail.title;
+                document.getElementById('modal-title').className = "text-3xl font-black mb-3 relative z-10 text-orange-500";
+                document.getElementById('modal-message').innerText = data.fail.msg;
+                
+                const btn = document.getElementById('modal-btn');
+                btn.innerText = "COBA LAGI";
+                btn.className = "btn-3d w-full bg-orange-400 border-b-[6px] border-orange-600 rounded-2xl py-4 font-black text-xl text-white relative z-10";
+
+                document.getElementById('modal-bg-decor').className = "absolute -top-20 -right-20 w-40 h-40 bg-orange-200 rounded-full opacity-50";
+            }
+
+            // Show Modal with Animation
+            modalOverlay.classList.remove('hide');
+            // Timeout to allow display:block to render before transitioning opacity/transform
+            setTimeout(() => {
+                modalOverlay.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-75');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function handleNext() {
+            // Hide Modal
+            modalOverlay.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-75');
+            
+            setTimeout(() => {
+                modalOverlay.classList.add('hide');
+                
+                if(isCorrectAnswered) {
+                    currentLevel++;
+                    if(currentLevel < quizData.length) {
+                        renderLevel();
+                    } else {
+                        // End Game
+                        screens.game.classList.add('hide');
+                        screens.end.classList.remove('hide');
+                    }
+                }
+            }, 300); // match transition duration
+        }
+
+        function resetGame() {
+            screens.end.classList.add('hide');
+            screens.start.style.opacity = '1';
+            screens.start.classList.remove('hide');
+        }
+
+    </script>
+</body>
+</html>
